@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "592337578960",
+    "firebase_url": "https://smart-tb.firebaseio.com",
+    "project_id": "smart-tb",
+    "storage_bucket": "smart-tb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592337578960:android:447bbd21d7fc1dc3",
+        "android_client_info": {
+          "package_name": "com.ict.smartbin2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592337578960-dhgi1hdhpb288idf43cnrag42h7r1f40.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHG4d6U9vLkyOFxXPHgeB5YIIG6qOGk9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592337578960-dhgi1hdhpb288idf43cnrag42h7r1f40.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

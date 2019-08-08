@@ -21,7 +21,7 @@ class _EditPageState extends State<EditPage> {
     memoController.dispose();
     super.dispose();
   }
-
+/*
   Widget Eww(dt)
   {
     return Center(child: Text(dt['name']));
@@ -38,7 +38,7 @@ class _EditPageState extends State<EditPage> {
     );
 
   }
-
+*/
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -47,7 +47,7 @@ class _EditPageState extends State<EditPage> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        body: testing());/*SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.only(left: 5, top: 40, right: 5),
             child: Column(
@@ -66,8 +66,9 @@ class _EditPageState extends State<EditPage> {
                 ),
                 RaisedButton(
                   onPressed: () {
-                   /* Firestore.instance.runTransaction((transaction) async{
-                      await transaction.set(Firestore.instance.collection('STB').document('TB001'), {
+
+                    Firestore.instance.runTransaction((transaction) async{
+                      await transaction.set(Firestore.instance.collection('STB').document(nameController.text), {
                         'name' : nameController.text,
                         'location' : locationController.text,
                         'date' : dateController.text,
@@ -75,8 +76,6 @@ class _EditPageState extends State<EditPage> {
                       });
                     }).then((data) {print("upl");})
                     ;
-                   */
-
 
                   },
                   child: Text('Click me'),
@@ -85,7 +84,7 @@ class _EditPageState extends State<EditPage> {
             ),
           ),
         ));
-    */
+
   }
 
   Widget idText() {

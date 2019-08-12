@@ -1,4 +1,4 @@
-# smart_bin
+# smartbin2
 
 A new Flutter application.
 

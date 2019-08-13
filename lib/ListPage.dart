@@ -67,6 +67,7 @@ Widget LSV(BuildContext context, DocumentSnapshot document) {
         trailing: IconButton(
           icon: Icon(Icons.more_vert),
           onPressed: () {
+            print('1');
             Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
               return EditPage();
             }));

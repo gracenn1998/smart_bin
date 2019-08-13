@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'AddPicture.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditPage extends StatefulWidget {
   @override
@@ -8,6 +11,49 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   @override
+  File _image;
+
+  getGalleryImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  getCameraImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
+
+  Widget addImage(){
+
+    return AlertDialog(
+      title: Text('Where do you want to get a picture?'),
+      content: Container(
+          height: null, //later add
+          child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text('Camera'),
+                onPressed: () {
+                  return getCameraImage();
+                },
+              ),
+              RaisedButton(
+                child: Text('My Galley'),
+                onPressed: () {
+                  return getGalleryImage();
+                },
+              )
+            ],
+          )
+      ),
+    );
+  }
+
 
   final nameController = TextEditingController();
   final locationController = TextEditingController();
@@ -111,6 +157,39 @@ class _EditPageState extends State<EditPage> {
             height: 150.0,
             color: Colors.white,
             child: RaisedButton(
+              onPressed: () {
+                print("ABC");
+//                addImage();
+                print("ABC2");
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Where do you want to get a picture?'),
+                      content: Container(
+                          height: null, //later add
+                          child: Column(
+                            children: <Widget>[
+                              RaisedButton(
+                                child: Text('Camera'),
+                                onPressed: () {
+                                  getCameraImage();
+                                },
+                              ),
+                              RaisedButton(
+                                child: Text('My Galley'),
+                                onPressed: () {
+                                  getGalleryImage();
+                                },
+                              )
+                            ],
+                          )
+                      ),
+                    );
+                  }
+                );
+
+              },
               child: Icon(Icons.delete,
                   color: const Color(0xFF000000), size: 120.0),
               textColor: Colors.black12,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EditPage.dart';
+import 'ListPage.dart';
 
 class DetailPage extends StatefulWidget {
   final String tID;
@@ -52,13 +53,26 @@ class _DetailPageState extends State<DetailPage> {
               padding: EdgeInsets.all(20),
               child: memoText(bin['memo']),
             ),
-            RaisedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                  return EditPage();
-                }));
-              },
-              child: Text("Edit"),
+            Row(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+                      return TrashBinList();
+                    }));
+                  },
+                  child: Text("Return"),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+                      return EditPage();
+                    }));
+                  },
+                  child: Text("Edit"),
+                ),
+              ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
           ],
         ),

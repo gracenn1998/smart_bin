@@ -8,25 +8,10 @@ class TrashBinList extends StatefulWidget {
 }
 
 class _TrashBinListState extends State<TrashBinList> {
-  String _selectedBin = null;
 
   @override
-
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    print('reload');
-
-    if(_selectedBin != null) {
-      return DetailPage(
-        tID: _selectedBin,
-      );
- //     Navigator.push(context, MaterialPageRoute<void>(builder: (context){
- //       return DetailPage(
- //           tID: 'T0001'
- //       );
- //     }));
-    }
 
     return Scaffold(
       appBar: AppBar(title: Text('trashbin management')),
@@ -75,6 +60,7 @@ class _TrashBinListState extends State<TrashBinList> {
   }
 
   Widget listbuild(BuildContext context) {
+
     return StreamBuilder(
         stream: Firestore.instance.collection('STB').snapshots(),
         builder: (context, snapshot) {
@@ -85,6 +71,8 @@ class _TrashBinListState extends State<TrashBinList> {
               itemBuilder: /*1*/ (context, i) {
                 return LSV(context, snapshot.data.documents[i]);
               });
+
+//            return getBinListView(snapshot.data.documents);
         },
       );
   }
@@ -97,9 +85,11 @@ class _TrashBinListState extends State<TrashBinList> {
           title: Text(document['name']),
           subtitle: Text(document['location']),
           onTap: () {
-            setState(() {
-              _selectedBin = document['tID'];
-            });
+            Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+              return DetailPage(
+                  tID: document['tID']
+              );
+            }));
           },
           trailing: IconButton(
             icon: Icon(Icons.more_vert),

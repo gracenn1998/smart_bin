@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'EditPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'DetailPage.dart';
 
 class TrashBinList extends StatefulWidget {
   _TrashBinListState createState() => _TrashBinListState();
 }
 
 class _TrashBinListState extends State<TrashBinList> {
+  String _selectedBin = null;
+
   @override
+
   Widget build(BuildContext context) {
     // TODO: implement build
+
+    print('reload');
+
+    if(_selectedBin != null) {
+      return DetailPage(
+        tID: _selectedBin,
+      );
+ //     Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+ //       return DetailPage(
+ //           tID: 'T0001'
+ //       );
+ //     }));
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('trashbin management')),
       floatingActionButton: FloatingActionButton(
@@ -32,7 +50,7 @@ class _TrashBinListState extends State<TrashBinList> {
                           Container(
                             child: TextField(
                               decoration:
-                                  InputDecoration(labelText: 'Password'),
+                              InputDecoration(labelText: 'Password'),
                             ),
                           )
                         ],
@@ -55,45 +73,48 @@ class _TrashBinListState extends State<TrashBinList> {
       body: listbuild(context),
     );
   }
-}
 
-Widget LSV(BuildContext context, DocumentSnapshot document) {
-  return ListView(
-    children: <Widget>[
-      ListTile(
-        leading: FlutterLogo(size: 100.0),
-        title: Text(document['name']),
-        subtitle: Text(document['location']),
-        trailing: IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-              return EditPage();
-            }));
+  Widget listbuild(BuildContext context) {
+    return StreamBuilder(
+        stream: Firestore.instance.collection('STB').snapshots(),
+        builder: (context, snapshot) {
+          return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemExtent: 100.0,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: /*1*/ (context, i) {
+                return LSV(context, snapshot.data.documents[i]);
+              });
+        },
+      );
+  }
+
+  Widget LSV(BuildContext context, DocumentSnapshot document) {
+    return ListView(
+      children: <Widget>[
+        ListTile(
+          leading: FlutterLogo(size: 100.0),
+          title: Text(document['name']),
+          subtitle: Text(document['location']),
+          onTap: () {
+            setState(() {
+              _selectedBin = document['tID'];
+            });
           },
+          trailing: IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+                return EditPage();
+              }));
+            },
+          ),
+          isThreeLine: true,
         ),
-        isThreeLine: true,
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }
 
-Widget listbuild(BuildContext context) {
-  return StreamBuilder(
-    stream: Firestore.instance.collection('STB').snapshots(),
-    builder: (context, snapshot) {
-      return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemExtent: 100.0,
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: /*1*/ (context, i) {
-            if (i.isOdd) return Divider();
-            /*2*/
 
-            final index = i ~/ 2; /*3*/
 
-            return LSV(context, snapshot.data.documents[index]);
-          });
-    },
-  );
-}

@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:smartbin2/models/userid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+
 class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _database;
@@ -24,7 +26,6 @@ class DatabaseHelper {
   Future<Database> get database async {
 
     if(_database == null) {
-      print('again');
       _database = await initializeDatabase();
     }
 
@@ -44,19 +45,17 @@ class DatabaseHelper {
 //  );
 
   Future<Database> initializeDatabase() async {
-    print('?????');
     //get directory path for both android & ios to store data
 //    Directory directory = await getApplicationDocumentsDirectory();
     String path = join(getDatabasesPath().toString(), 'user.db') ;
 
     //open/create dtb at a given path
     var userDTB = await openDatabase(path, version: 1, onCreate: _createDb);
-    print(userDTB);
     return userDTB;
   }
 
   void _createDb(Database db, int newVersion) async {
-    print('create new');
+    print('create new user when first time run app');
 
     await db.execute('CREATE TABLE $userTable($colID INTERGER PRIMARY KEY)');
     String newID = await addDataFireStore();
@@ -70,12 +69,9 @@ class DatabaseHelper {
 
   //fetch operation
   getUserMapList() async {
-    print('22222');
     Database db = await this.database;
-    print('3333');
 //    var result = await db.rawQuery('SELECT * FROM $userTable');
     var result = await db.query(userTable);
-    print('4444');
     return result;
   }
 
@@ -106,7 +102,7 @@ class DatabaseHelper {
 
     Firestore.instance.runTransaction((transaction) async{
       await transaction.set(Firestore.instance.collection("users").document(newID), {
-        'userID' : newID,
+        'uID' : newID,
       });
     }).then((data){
       streamSub.cancel();
@@ -131,11 +127,14 @@ class DatabaseHelper {
 //    print('deleted');
 //    User thisUser = User('U0003');
 //    await insertUser(thisUser);
-    print('get user here');
+//    print('get user here');
     var userMap = await getUserMapList();
-    print('1111');
-    print(User.fromMapObject(userMap[0]).uID);
+//    print('1111');
+//    print(User.fromMapObject(userMap[0]).uID);
 
     return User.fromMapObject(userMap[0]);
   }
+
+
+
 }

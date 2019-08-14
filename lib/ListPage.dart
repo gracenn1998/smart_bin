@@ -10,7 +10,7 @@ class TrashBinList extends StatefulWidget {
 }
 
 class _TrashBinListState extends State<TrashBinList> {
-
+  String uID;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
   @override
@@ -18,7 +18,13 @@ class _TrashBinListState extends State<TrashBinList> {
     // TODO: implement build
 
     print('list page');
-    databaseHelper.getUser().toString();
+
+    databaseHelper.getUser().then((user) {
+      uID = user.uID;
+    });
+
+    print("user id: ");
+    print(uID);
 
     return Scaffold(
       appBar: AppBar(title: Text('trashbin management')),
@@ -69,8 +75,9 @@ class _TrashBinListState extends State<TrashBinList> {
   Widget listbuild(BuildContext context) {
 
     return StreamBuilder(
-        stream: Firestore.instance.collection('STB').snapshots(),
+        stream: Firestore.instance.collection('users').document(uID).collection('binList').snapshots(),
         builder: (context, snapshot) {
+
           if(!snapshot.hasData) return Center(child: Text('Loading...', ),);
           return ListView.builder(
               padding: const EdgeInsets.all(16.0),

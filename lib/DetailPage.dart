@@ -5,13 +5,16 @@ import 'ListPage.dart';
 
 class DetailPage extends StatefulWidget {
   final String tID;
+
   const DetailPage({@required this.tID});
+
   @override
   _DetailPageState createState() => _DetailPageState(tID);
 }
 
 class _DetailPageState extends State<DetailPage> {
   String tID;
+
   _DetailPageState(this.tID);
 
   @override
@@ -53,26 +56,14 @@ class _DetailPageState extends State<DetailPage> {
               padding: EdgeInsets.all(20),
               child: memoText(bin['memo']),
             ),
-            Row(
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                      return TrashBinList();
-                    }));
-                  },
-                  child: Text("Return"),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                      return EditPage();
-                    }));
-                  },
-                  child: Text("Edit"),
-                ),
-              ],
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute<void>(builder: (context) {
+                  return EditPage();
+                }));
+              },
+              child: Text("Edit"),
             ),
           ],
         ),

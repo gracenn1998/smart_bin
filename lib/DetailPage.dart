@@ -5,14 +5,16 @@ import 'ListPage.dart';
 
 class DetailPage extends StatefulWidget {
   final String tID;
-  const DetailPage({@required this.tID});
+  final String uID;
+  const DetailPage({@required this.tID, @required this.uID});
   @override
-  _DetailPageState createState() => _DetailPageState(tID);
+  _DetailPageState createState() => _DetailPageState(tID, uID);
 }
 
 class _DetailPageState extends State<DetailPage> {
-  String tID;
-  _DetailPageState(this.tID);
+  String tID, uID;
+  _DetailPageState(this.tID, this.uID);
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,12 @@ class _DetailPageState extends State<DetailPage> {
         ),
         body: StreamBuilder(
             stream: Firestore.instance
-                .collection('STB')
-                .where('tID', isEqualTo: tID)
-                .snapshots(),
+                .collection('users')
+                .document(uID)
+                .collection('binList')
+                .where('tID', isEqualTo: tID).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Center(child: Text('Loading...'));
-              print(snapshot.data.documents[0]['memo']);
               return showAllInfo(snapshot.data.documents[0]);
             }));
   }
@@ -58,15 +60,10 @@ class _DetailPageState extends State<DetailPage> {
                 RaisedButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                      return TrashBinList();
-                    }));
-                  },
-                  child: Text("Return"),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                      return EditPage();
+                      return EditPage(
+                        uID: uID,
+                        tID: tID,
+                      );
                     }));
                   },
                   child: Text("Edit"),

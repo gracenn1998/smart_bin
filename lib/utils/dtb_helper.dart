@@ -132,6 +132,9 @@ class DatabaseHelper {
 //    print('1111');
 //    print(User.fromMapObject(userMap[0]).uID);
 
+//    for(int i = 0; i < userMap.length; i++) {
+//      print(User.fromMapObject(userMap[i]).uID);
+//    }
     return User.fromMapObject(userMap[0]);
   }
 

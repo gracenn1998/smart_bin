@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'EditPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'DetailPage.dart';
+import 'package:smartbin2/utils/dtb_helper.dart';
+import 'package:smartbin2/models/userid.dart';
 
 class TrashBinList extends StatefulWidget {
   _TrashBinListState createState() => _TrashBinListState();
@@ -9,9 +11,14 @@ class TrashBinList extends StatefulWidget {
 
 class _TrashBinListState extends State<TrashBinList> {
 
+  DatabaseHelper databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
+    print('list page');
+    databaseHelper.getUser().toString();
 
     return Scaffold(
       appBar: AppBar(title: Text('trashbin management')),
@@ -64,6 +71,7 @@ class _TrashBinListState extends State<TrashBinList> {
     return StreamBuilder(
         stream: Firestore.instance.collection('STB').snapshots(),
         builder: (context, snapshot) {
+          if(!snapshot.hasData) return Center(child: Text('Loading...', ),);
           return ListView.builder(
               padding: const EdgeInsets.all(16.0),
               itemExtent: 100.0,

@@ -62,8 +62,8 @@ class _DetailPageState extends State<DetailPage> {
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
                       return EditPage(
-//                        uID: uID,
-//                        tID: tID,
+                        uID: uID,
+                        tID: tID,
                       );
                     }));
                   },

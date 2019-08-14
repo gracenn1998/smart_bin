@@ -24,6 +24,8 @@ dependencies:
   sqflite:
   path:
   cloud_firestore:
+  image_picker: 0.4.0
+  animated_stream_list: ^0.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

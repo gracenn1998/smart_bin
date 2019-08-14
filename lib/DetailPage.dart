@@ -7,14 +7,15 @@ class DetailPage extends StatefulWidget {
   final String tID;
   final String uID;
   const DetailPage({@required this.tID, @required this.uID});
+
   @override
   _DetailPageState createState() => _DetailPageState(tID, uID);
 }
 
 class _DetailPageState extends State<DetailPage> {
+
   String tID, uID;
   _DetailPageState(this.tID, this.uID);
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,8 @@ class _DetailPageState extends State<DetailPage> {
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
                       return EditPage(
-                        uID: uID,
-                        tID: tID,
+//                        uID: uID,
+//                        tID: tID,
                       );
                     }));
                   },

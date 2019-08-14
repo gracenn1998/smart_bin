@@ -87,7 +87,7 @@ class _TrashBinListState extends State<TrashBinList> {
 
           if(!snapshot.hasData) return Center(child: Text('Loading...', ),);
           return ListView.builder(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
               itemExtent: 100.0,
               itemCount: snapshot.data.documents.length,
               itemBuilder: /*1*/ (context, i) {
@@ -104,7 +104,7 @@ class _TrashBinListState extends State<TrashBinList> {
       children: <Widget>[
         ListTile(
           leading: FlutterLogo(size: 100.0),
-          title: Text(document['name']),
+          title: Text(document['tID']),
           subtitle: Text(document['location']),
           onTap: () {
             Navigator.push(context, MaterialPageRoute<void>(builder: (context){
@@ -115,12 +115,12 @@ class _TrashBinListState extends State<TrashBinList> {
             }));
           },
           trailing: IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                return EditPage();
-              }));
-            },
+            icon: Icon(Icons.close),
+           // onPressed: () {
+           //   Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+           //     return EditPage();
+           //   }));
+           // },              // Please add the remove function HERE !! Thank you !!
           ),
           isThreeLine: true,
         ),

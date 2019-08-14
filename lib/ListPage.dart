@@ -19,12 +19,19 @@ class _TrashBinListState extends State<TrashBinList> {
 
     print('list page');
 
-    databaseHelper.getUser().then((user) {
-      uID = user.uID;
-    });
+//    await databaseHelper.getUser();
 
-    print("user id: ");
-    print(uID);
+    databaseHelper.getUser().then((user) {
+      if(uID == null) {
+        setState(() {
+          uID = user.uID;
+        });
+      }
+
+    });
+//
+//    print("user id: ");
+//    print(uID);
 
     return Scaffold(
       appBar: AppBar(title: Text('trashbin management')),
@@ -102,7 +109,8 @@ class _TrashBinListState extends State<TrashBinList> {
           onTap: () {
             Navigator.push(context, MaterialPageRoute<void>(builder: (context){
               return DetailPage(
-                  tID: document['tID']
+                tID: document['tID'],
+                uID: uID,
               );
             }));
           },

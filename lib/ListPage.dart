@@ -35,21 +35,19 @@ class _TrashBinListState extends State<TrashBinList> {
                 FlatButton(
                   child: Text('See information'), //
                   onPressed: () {
-//                    Navigator.push(
-//                        context,
-//                        MaterialPageRoute(
-//                            builder: (context) =>
-//                                ShowDriverInfo(
-//                                  key: PageStorageKey("showInfo"),
-//                                  dID: msg['data']['dID'],
-//                                )
-//                        )
-//                    );
+                    print(msg['data']['tID']);
+                    Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+                      return DetailPage(
+                        uID: uID,
+                        tID: msg['data']['tID'],
+                      );
+
+                    }));
 //                    Navigator.of(context).pop();
                   },
                 ),
                 FlatButton(
-                  child: Text('Ok'),
+                  child: Text('Close'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -61,9 +59,27 @@ class _TrashBinListState extends State<TrashBinList> {
       },
       onResume: (Map<String, dynamic> msg) {
         print("onResume: $msg");
+        print(msg['data']['tID']);
+        Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+          return DetailPage(
+            uID: uID,
+            tID: msg['data']['tID'],
+          );
+
+        }));
       },
       onLaunch: (Map<String, dynamic> msg) {
         print("onLaunch: $msg");
+//        Navigator.push(
+//            context,
+//            MaterialPageRoute(
+//                builder: (context) =>
+//                    DetailPage(
+//                      uID: uID,
+//                      tID: msg['data']['tID'],
+//                    )
+//            )
+//        );
       },
     );
 

@@ -12,26 +12,28 @@ admin.initializeApp();
 // });
 
 
-exports.senNoti= functions.firestore.document('users/{uID}/binList/{tID}')
+exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
                                     .onUpdate((change, context) => {
-      console.log('updated');
+//      console.log('updated');
       const userID = context.params.uID;
       const tID = context.params.tID;
       const bin1 = change.after.data()['bin1'];
       const bin2 = change.after.data()['bin2'];
 
-      console.log(bin1);
+//      console.log(bin1);
 
       var fullBinNum;
 
       if(bin1 == true || bin2 == true) {
         var msg = {
                 notification: {
+
                     title: 'Bin is full',
                     body: 'Some sub-bins of bin ' + tID + ' have been full',
-                    "click_action": "FLUTTER_NOTIFICATION_CLICK",
                 },
                 data : {
+                    "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                    'tID' : tID,
                     'bin1' : bin1.toString(),
                     'bin2' : bin2.toString(),
                 }

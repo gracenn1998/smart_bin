@@ -86,6 +86,8 @@ class _TrashBinListState extends State<TrashBinList> {
         setState(() {
           uID = user.uID;
           _fcm.subscribeToTopic(uID);
+          print("user id: ");
+          print(uID);
         });
       }
 

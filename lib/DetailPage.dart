@@ -33,7 +33,7 @@ class _DetailPageState extends State<DetailPage> {
                 .collection('binList')
                 .where('tID', isEqualTo: tID).snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Center(child: Text('Loading...'));
+              if (!snapshot.hasData) return Center(child: Text('Loading...')); else
               return showAllInfo(snapshot.data.documents[0]);
             }));
   }

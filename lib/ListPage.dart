@@ -25,6 +25,8 @@ class _TrashBinListState extends State<TrashBinList> {
       if(uID == null) {
         setState(() {
           uID = user.uID;
+          print("user id: ");
+          print(uID);
         });
       }
 

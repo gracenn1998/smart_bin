@@ -16,6 +16,7 @@ exports.senNoti= functions.firestore.document('users/{uID}/binList/{tID}')
                                     .onUpdate((change, context) => {
       console.log('updated');
       const userID = context.params.uID;
+      const tID = context.params.tID;
       const bin1 = change.after.data()['bin1'];
       const bin2 = change.after.data()['bin2'];
 

@@ -24,6 +24,8 @@ dependencies:
   sqflite:
   path:
   cloud_firestore:
+  firebase_messaging: 4.0.0+2
+  firebase_core:
   image_picker: 0.4.0
   animated_stream_list: ^0.0.4
 

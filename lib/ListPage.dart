@@ -3,7 +3,7 @@ import 'EditPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'DetailPage.dart';
 import 'package:smartbin2/utils/dtb_helper.dart';
-import 'package:smartbin2/models/userid.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class TrashBinList extends StatefulWidget {
   _TrashBinListState createState() => _TrashBinListState();
@@ -13,10 +13,70 @@ class _TrashBinListState extends State<TrashBinList> {
   String uID;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> msg) {
+        print("onMessage: $msg");
+//        print(_selectedDriverID);
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: ListTile(
+                title: Text(msg['notification']['title']),
+                subtitle: Text(msg['notification']['body']),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('See information'), //
+                  onPressed: () {
+//                    Navigator.push(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (context) =>
+//                                ShowDriverInfo(
+//                                  key: PageStorageKey("showInfo"),
+//                                  dID: msg['data']['dID'],
+//                                )
+//                        )
+//                    );
+//                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+
+              ],
+            )
+        );
+      },
+      onResume: (Map<String, dynamic> msg) {
+        print("onResume: $msg");
+      },
+      onLaunch: (Map<String, dynamic> msg) {
+        print("onLaunch: $msg");
+      },
+    );
+
+    _fcm.requestNotificationPermissions(
+        IosNotificationSettings(
+
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
     print('list page');
 
 //    await databaseHelper.getUser();
@@ -25,6 +85,7 @@ class _TrashBinListState extends State<TrashBinList> {
       if(uID == null) {
         setState(() {
           uID = user.uID;
+          _fcm.subscribeToTopic(uID);
         });
       }
 

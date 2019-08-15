@@ -28,7 +28,8 @@ exports.senNoti= functions.firestore.document('users/{uID}/binList/{tID}')
         var msg = {
                 notification: {
                     title: 'Bin is full',
-                    body: 'Some sub-bins of bin' + tID + ' have been full',
+                    body: 'Some sub-bins of bin ' + tID + ' have been full',
+                    "click_action": "FLUTTER_NOTIFICATION_CLICK",
                 },
                 data : {
                     'bin1' : bin1.toString(),

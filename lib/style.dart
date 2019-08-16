@@ -39,7 +39,7 @@ const TextStyle listTileTitleStyle = TextStyle(
 const TextStyle listTileSubTitleStyle = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: Colors.black
+    color: Colors.pink
 );
 
 

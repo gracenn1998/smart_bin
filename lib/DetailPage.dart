@@ -191,8 +191,8 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget subBinStatus(binList) {
-    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : '...';
-    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : '...';
+    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : 'Normal';
+    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : 'Normal';
 
     const TextStyle fullStatusStyle = TextStyle(
         color: Colors.deepOrange

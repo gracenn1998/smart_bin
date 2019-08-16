@@ -25,6 +25,28 @@ class _DetailPageState extends State<DetailPage> {
             'Detail',
             style: TextStyle(fontSize: 20),
           ),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  //editttt
+                  Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+                    return EditPage(
+                      uID: uID,
+                      tID: tID,
+                    );
+                  }));
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+//                    return EditDriverInfo(
+//                      dID: dID,
+//                    );
+//                  }));
+                },
+              ),
+            ),
+          ],
         ),
         body: StreamBuilder(
             stream: Firestore.instance
@@ -35,7 +57,9 @@ class _DetailPageState extends State<DetailPage> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Center(child: Text('Loading...')); else
               return showAllInfo(snapshot.data.documents[0]);
-            }));
+            }),
+
+    );
   }
 
   Widget showAllInfo(bin) {
@@ -52,25 +76,27 @@ class _DetailPageState extends State<DetailPage> {
               padding: EdgeInsets.all(20),
               child: rowText(bin['name'], bin['location'], bin['date']),
             ),
+            Row(
+              children: <Widget>[
+                StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('STB')
+                        .where('tID', isEqualTo: tID).snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Center(child: Text('Loading...'));
+                      else {
+                        print(tID);
+                        return subBinStatus(snapshot.data.documents[0]);
+                      }
+
+                    }),
+
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            ),
             Container(
               padding: EdgeInsets.all(20),
               child: memoText(bin['memo']),
-            ),
-            Row(
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-                      return EditPage(
-                        uID: uID,
-                        tID: tID,
-                      );
-                    }));
-                  },
-                  child: Text("Edit"),
-                ),
-              ],
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
           ],
         ),
@@ -152,15 +178,70 @@ class _DetailPageState extends State<DetailPage> {
   Widget memoText(memo) {
     return Container(
       width: 350,
-      height: 40,
+      height: 100,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.blueAccent, width: 2.0)),
       child: Center(
-        child: Text(
-          memo,
-          textScaleFactor: 1.2,
+        child: SingleChildScrollView(
+          child:  Text(
+            memo,
+            textScaleFactor: 1.2,
+          ),
         ),
       ),
+    );
+  }
+
+  Widget subBinStatus(binList) {
+    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : 'Normal';
+    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : 'Normal';
+
+    const TextStyle fullStatusStyle = TextStyle(
+        color: Colors.deepOrange
+    );
+
+    const TextStyle normalStatusStyle = TextStyle(
+        color: Colors.black
+    );
+
+    return Column(
+      children: <Widget>[
+        Row (
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              margin: EdgeInsets.only(top: 7, bottom: 7, right: 10),
+              width: 165,
+              height: 40,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent, width: 2.0)),
+              child: Center(
+                child: Text(
+                  'Recycling: ' + bin1status,
+                  style: bin1status == 'Full' ? fullStatusStyle : normalStatusStyle,
+                  textScaleFactor: 1.1,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              margin: EdgeInsets.only(top: 7, bottom: 7, right: 10),
+              width: 165,
+              height: 40,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent, width: 2.0)),
+              child: Center(
+                child: Text(
+                  'Non-recycling: ' + bin2status,
+                  style: bin2status == 'Full' ? fullStatusStyle : normalStatusStyle,
+                  textScaleFactor: 1.1,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+      ],
     );
   }
 }

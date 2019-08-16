@@ -4,6 +4,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -12,22 +13,23 @@ admin.initializeApp();
 // });
 
 
-exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
+//exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
+exports.senNoti2= functions.firestore.document('STB/{tID}')
                                     .onUpdate((change, context) => {
 //      console.log('updated');
-      const userID = context.params.uID;
+//      const userID = context.params.uID;
       const tID = context.params.tID;
       const bin1 = change.after.data()['bin1'];
       const bin2 = change.after.data()['bin2'];
+//      const bin1Pre = change.previousData.data['bin1'];
+//      const bin2Pre = change.previousData.data['bin2'];
 
 //      console.log(bin1);
 
-      var fullBinNum;
 
       if(bin1 == true || bin2 == true) {
         var msg = {
                 notification: {
-
                     title: 'Bin is full',
                     body: 'Some sub-bins of bin ' + tID + ' have been full',
                 },
@@ -38,7 +40,7 @@ exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
                     'bin2' : bin2.toString(),
                 }
               };
-         admin.messaging().sendToTopic(userID, msg).then((response) => {
+         admin.messaging().sendToTopic(tID, msg).then((response) => {
             console.log("Success", response);
          })
          .catch((error) => {
@@ -47,44 +49,6 @@ exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
          });
 
       }
-
-
-//    const dID = context.params.dID;
-//    const alcoVal = change.after.val();
-//    const curTime = new Date();
-//
-//    admin.database().ref("/driver/" + dID).once('value').then((snapshot) => {
-//        var lastNotiTime = snapshot.child('lastNotiTime').val();
-//        var tripID = snapshot.child('tripCode').val();
-//        console.log(curTime.getTime() - lastNotiTime);
-//
-//        if(alcoVal >= drunkVal && (curTime.getTime() - lastNotiTime)>= delayTime) {
-//                var msg = {
-//                        notification: {
-//                            title: 'Vượt mức chỉ số cồn',
-//                            body: 'Tài xế ' + dID + ' có dấu hiệu vượt mức nồng độ cồn',
-//                        },
-//                        data : {
-//                            'lastNotiTime' : lastNotiTime.toString(),
-//                            'dID' : dID.toString(),
-//                            'tripID' : tripID.toString()
-//                        }
-//                    }
-//                admin.messaging().sendToTopic('alcoholTracking', msg).then((response) => {
-//                    console.log("Success", response);
-//                    lastNotiTime = curTime.getTime();
-//                    admin.database().ref("/driver/" + dID).update({lastNotiTime});
-//                })
-//                .catch((error) => {
-//                    console.log("Error", error);
-//                    return false;
-//                });
-//            }
-//            else{
-//                console.log('still in delay')
-//            }
-////        console.log(snapshot.child('tripCode').val());
-//    });
 
     return true;
 

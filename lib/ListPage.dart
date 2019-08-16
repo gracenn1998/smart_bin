@@ -108,7 +108,7 @@ class _TrashBinListState extends State<TrashBinList> {
       if(uID == null) {
         setState(() {
           uID = user.uID;
-          _fcm.subscribeToTopic(uID);
+//          _fcm.subscribeToTopic(uID);
           print("user id: ");
           print(uID);
         });
@@ -134,24 +134,34 @@ class _TrashBinListState extends State<TrashBinList> {
 
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center( child: CircularProgressIndicator());
-          else
-          return ListView.builder(
-              padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
-              itemExtent: 100.0,
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: /*1*/ (context, i) {
-                return LSV(context, snapshot.data.documents[i]);
-              });
+          else {
+            var len = snapshot.data.documents.length;
+            var done = false;
+            return ListView.builder(
+                padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
+                itemExtent: 100.0,
+                itemCount: len,
+                itemBuilder: /*1*/ (context, i) {
+                  if(!done) {
+                    _fcm.subscribeToTopic(snapshot.data.documents[i]['tID']);
+                  }
+                  if(i == (len-1)) { //stop subscri topic again when reload
+                    done = true;
+                  }
+                  return LSV(context, snapshot.data.documents[i]);
+                });
 
 //            return getBinListView(snapshot.data.documents);
-        },
+          }
+          }
+
       );
   }
 
   Widget LSV(BuildContext context, DocumentSnapshot document) {
     final name = document['name'] == null ? document['tID']: document['name'];
     final location = document['location'] == null ?
-    "Did not add detail info": document['location'];
+    "Add detail info necessary": document['location'];
 
     return ListView(
       children: <Widget>[

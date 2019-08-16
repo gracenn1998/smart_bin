@@ -4,6 +4,7 @@ import 'DetailPage.dart';
 import 'package:smartbin2/utils/dtb_helper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:smartbin2/AddDetailInfo.dart';
+import 'package:smartbin2/style.dart';
 
 class TrashBinList extends StatefulWidget {
   _TrashBinListState createState() => _TrashBinListState();
@@ -30,19 +31,18 @@ class _TrashBinListState extends State<TrashBinList> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> msg) {
         print("onMessage: $msg");
-//        print(_selectedDriverID);
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
               content: ListTile(
-                title: Text(msg['notification']['title']),
-                subtitle: Text(msg['notification']['body']),
+                title: Text(msg['notification']['title'], style: listTileTitleStyle,),
+                subtitle: Text(msg['notification']['body'], style: listTileSubTitleStyle),
               ),
               actions: <Widget>[
                 FlatButton(
                   child: Text('See information'), //
                   onPressed: () {
-                    print(msg['data']['tID']);
+
                     Navigator.push(context, MaterialPageRoute<void>(builder: (context){
                       return DetailPage(
                         uID: uID,
@@ -100,7 +100,6 @@ class _TrashBinListState extends State<TrashBinList> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print('list page');
 
 //    await databaseHelper.getUser();
 
@@ -115,12 +114,9 @@ class _TrashBinListState extends State<TrashBinList> {
       }
 
     });
-//
-//    print("user id: ");
-//    print(uID);
 
     return Scaffold(
-      appBar: AppBar(title: Text('trashbin management')),
+      appBar: AppBar(title:  Center(child: Text('Trashbin Management', style: appBarTxTStyle, textAlign: TextAlign.center,)),),
       floatingActionButton: buildFABAdd(),
       body: listbuild(context),
     );

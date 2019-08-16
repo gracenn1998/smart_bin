@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:smartbin2/DetailPage.dart';
+import 'package:smartbin2/style.dart';
 
 class AddInfo extends StatefulWidget {
   final String tID;
@@ -17,26 +17,26 @@ class AddInfoState extends State<AddInfo> {
   String uID;
   AddInfoState(this.tID, this.uID);
   File _image;
-  final nameController = TextEditingController();
-  final locationController = TextEditingController();
-  final dateController = TextEditingController();
-  final memoController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _locationController = TextEditingController();
+//  final _dateController = TextEditingController();
+  final _memoController = TextEditingController();
 
   void dispose() {
-    nameController.dispose();
-    locationController.dispose();
-    dateController.dispose();
-    memoController.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
+//    _dateController.dispose();
+    _memoController.dispose();
     super.dispose();
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: Center(child: Text(
             'Add Detail Information',
-            style: TextStyle(fontSize: 20),
-          ),
+            style: appBarTxTStyle, textAlign: TextAlign.center,
+          )),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -62,10 +62,10 @@ class AddInfoState extends State<AddInfo> {
                       await transaction.update(Firestore.instance.collection('users')
                           .document(uID)
                           .collection('binList').document(tID), {
-                        'name' : nameController.text,
-                        'location' : locationController.text,
-                        'date' : dateController.text,
-                        'memo' : memoController.text,
+                        'name' : _nameController.text,
+                        'location' : _locationController.text,
+//                        'date' : _dateController.text,
+                        'memo' : _memoController.text,
                       });
                     }).then((data) {
                       print("upl");
@@ -172,48 +172,36 @@ class AddInfoState extends State<AddInfo> {
   }
 
   Widget columnTextField() {
-    return Column(children: <Widget>[
-      Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
-        child: TextField(
-          controller: nameController,
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),
-              contentPadding: EdgeInsets.all(5.0),
-              hintText: 'Name'),
-        ),
+    return Column(
+        children: <Widget>[
+          details('Name'),
+          details('Location'),
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween
+    );
+  }
+
+  Widget details(field) {
+    return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      height: 55,
+      child: TextField(
+        controller: _locationController,
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),
+            contentPadding: EdgeInsets.all(5.0),
+            hintText: field),
+        style: txtFieldStyle,
       ),
-      Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
-        child: TextField(
-          controller: locationController,
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),
-              contentPadding: EdgeInsets.all(5.0),
-              hintText: 'Location'),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
-        child: TextField(
-          controller: dateController,
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),
-              contentPadding: EdgeInsets.all(5.0),
-              hintText: 'Date'),
-        ),
-      ),
-    ], mainAxisAlignment: MainAxisAlignment.spaceBetween);
+    );
   }
 
   Widget memoTextField() {
     return Container(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: TextField(
-          controller: memoController,
+          controller: _memoController,
           keyboardType: TextInputType.multiline,
           maxLines: null,
           style: TextStyle(fontSize: 21, color: Colors.black),

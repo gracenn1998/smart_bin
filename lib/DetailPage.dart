@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EditPage.dart';
-import 'ListPage.dart';
+import 'package:smartbin2/style.dart';
 
 class DetailPage extends StatefulWidget {
   final String tID;
@@ -21,10 +21,10 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: Center(child: Text(
             'Detail',
-            style: TextStyle(fontSize: 20),
-          ),
+            style: appBarTxTStyle, textAlign: TextAlign.center,
+          )),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 5.0),
@@ -74,7 +74,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Container(
               padding: EdgeInsets.all(20),
-              child: rowText(bin['name'], bin['location'], bin['date']),
+              child: rowText(bin['name'], bin['location']),
             ),
             Row(
               children: <Widget>[
@@ -85,7 +85,6 @@ class _DetailPageState extends State<DetailPage> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Center(child: Text('Loading...'));
                       else {
-                        print(tID);
                         return subBinStatus(snapshot.data.documents[0]);
                       }
 
@@ -112,14 +111,14 @@ class _DetailPageState extends State<DetailPage> {
           border: Border.all(color: Colors.blueAccent, width: 2.0)),
       child: Center(
         child: Text(
-          id,
+          'Smart Trashbin $tID',
           textScaleFactor: 1.3,
         ),
       ),
     );
   }
 
-  Widget rowText(name, location, date) {
+  Widget rowText(name, location) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -141,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
           ),
           Expanded(
             flex: 1,
-            child: detailText(name, location, date),
+            child: detailText(name, location),
           ),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -150,11 +149,10 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget detailText(name, location, date) {
+  Widget detailText(name, location) {
     return Column(children: <Widget>[
       detail(name),
       detail(location),
-      detail(date),
     ], mainAxisAlignment: MainAxisAlignment.spaceBetween);
   }
 
@@ -163,7 +161,7 @@ class _DetailPageState extends State<DetailPage> {
       padding: EdgeInsets.only(top: 10, bottom: 10),
       margin: EdgeInsets.only(top: 7, bottom: 7),
       width: 150,
-      height: 40,
+      height: 50,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.blueAccent, width: 2.0)),
       child: Center(
@@ -193,8 +191,8 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget subBinStatus(binList) {
-    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : 'Normal';
-    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : 'Normal';
+    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : '...';
+    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : '...';
 
     const TextStyle fullStatusStyle = TextStyle(
         color: Colors.deepOrange
@@ -211,29 +209,29 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               padding: EdgeInsets.only(top: 10, bottom: 10),
               margin: EdgeInsets.only(top: 7, bottom: 7, right: 10),
-              width: 165,
-              height: 40,
+              width: 170,
+              height: 45,
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.blueAccent, width: 2.0)),
               child: Center(
                 child: Text(
                   'Recycling: ' + bin1status,
-                  style: bin1status == 'Full' ? fullStatusStyle : normalStatusStyle,
+                  style: bin1status == 'Full' ? binStatusStyle(1) : binStatusStyle(0),
                   textScaleFactor: 1.1,
                 ),
               ),
             ),
             Container(
               padding: EdgeInsets.only(top: 10, bottom: 10),
-              margin: EdgeInsets.only(top: 7, bottom: 7, right: 10),
-              width: 165,
-              height: 40,
+              margin: EdgeInsets.only(top: 7, bottom: 7),
+              width: 170,
+              height: 45,
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.blueAccent, width: 2.0)),
               child: Center(
                 child: Text(
                   'Non-recycling: ' + bin2status,
-                  style: bin2status == 'Full' ? fullStatusStyle : normalStatusStyle,
+                  style: bin2status == 'Full' ? binStatusStyle(1) : binStatusStyle(0),
                   textScaleFactor: 1.1,
                 ),
               ),

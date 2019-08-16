@@ -110,7 +110,7 @@ class _EditPageState extends State<EditPage> {
           builder: (context, snapshot) {
             if(!snapshot.hasData) return Center(child: Text('Loading...'));
             bin = snapshot.data.documents[0];
-            _nameController.text = bin['name'];
+//            _nameController.text = bin['name'];
 //            locationController.text = bin['address'];
 //            dateController.text = bin['idCard'];
 //            memoController.text = bin['gender'];
@@ -244,19 +244,19 @@ class _EditPageState extends State<EditPage> {
   Widget columnTextField() {
     return Column(
         children: <Widget>[
-          details('Name'),
-          details('Location'),
+          details('Name', _nameController),
+          details('Location', _locationController),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceBetween
     );
   }
 
-  Widget details(field) {
+  Widget details(field, controller) {
     return Container(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       height: 55,
       child: TextField(
-        controller: _locationController,
+        controller: controller,
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),

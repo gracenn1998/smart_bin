@@ -194,11 +194,9 @@ class _TrashBinListState extends State<TrashBinList> {
             },
             trailing: IconButton(
               icon: Icon(Icons.close),
-              // onPressed: () {
-              //   Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-              //     return EditPage();
-              //   }));
-              // },              // Please add the remove function HERE !! Thank you !!
+               onPressed: () {
+                 confirmDelete(context, document['tID']);
+               },
             ),
             isThreeLine: true,
           );
@@ -299,6 +297,35 @@ class _TrashBinListState extends State<TrashBinList> {
           )
         ],
       ),
+    );
+  }
+
+  void confirmDelete(BuildContext context, id) {
+    var confirmDialog = AlertDialog(
+      title: Text('Do you want to remove this bin?', style: titleStyle,),
+      content: null,
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('No'),
+        ),
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Firestore.instance.collection('users').document(uID).collection('binList').document(id).delete();
+          },
+          child: Text(
+            'Remove',
+            style: TextStyle(color: Colors.red),
+          ),
+        )
+      ],
+    );
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => confirmDialog
     );
   }
 }

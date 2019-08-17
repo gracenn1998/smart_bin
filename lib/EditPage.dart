@@ -161,9 +161,8 @@ class _EditPageState extends State<EditPage> {
             onPressed: () {
 
               Firestore.instance.runTransaction((transaction) async{
-                await transaction.update(Firestore.instance.collection('users')
-                    .document(uID)
-                    .collection('binList').document(tID), {
+                await transaction.update(Firestore.instance.collection('STB')
+                      .document(tID), {
                   'name' : _nameController.text,
                   'location' : _locationController.text,
 //                    'date' : _dateController.text,

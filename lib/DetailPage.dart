@@ -51,9 +51,7 @@ class _DetailPageState extends State<DetailPage> {
         ),
         body: StreamBuilder(
             stream: Firestore.instance
-                .collection('users')
-                .document(uID)
-                .collection('binList')
+                .collection('STB')
                 .where('tID', isEqualTo: tID).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Center(child: Text('Loading...'));
@@ -84,17 +82,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Row(
               children: <Widget>[
-                StreamBuilder(
-                    stream: Firestore.instance
-                        .collection('STB')
-                        .where('tID', isEqualTo: tID).snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) return Center(child: Text('Loading...'));
-                      else {
-                        return subBinStatus(snapshot.data.documents[0]);
-                      }
-
-                    }),
+                subBinStatus(bin['bin1'], bin['bin2'])
 
               ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -196,9 +184,9 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget subBinStatus(binList) {
-    var bin1status = binList['bin1'].toString() == 'true'? 'Full' : 'Normal';
-    var bin2status = binList['bin2'].toString() == 'true'? 'Full' : 'Normal';
+  Widget subBinStatus(bin1, bin2) {
+    var bin1status = bin1.toString() == 'true'? 'Full' : 'Normal';
+    var bin2status = bin2.toString() == 'true'? 'Full' : 'Normal';
 
     const TextStyle fullStatusStyle = TextStyle(
         color: Colors.deepOrange

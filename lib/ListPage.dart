@@ -156,15 +156,27 @@ class _TrashBinListState extends State<TrashBinList> {
 
   Widget LSV(BuildContext context, DocumentSnapshot document) {
     final name = document['name'] == null ? document['tID']: document['name'];
-    final location = document['location'] == null ?
-    "Add detailed information necessary": document['location'];
+
+
+
 
     return ListView(
       children: <Widget>[
         ListTile(
           leading: FlutterLogo(size: 100.0),
           title: Text(name),
-          subtitle: Text(location, style: document['name'] == null ? subTitleStyle : subTitleNormStyle,),
+          subtitle: StreamBuilder(
+            stream: Firestore.instance.collection('STB').where('tID', isEqualTo: document['tID']).snapshots(),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData)
+                return Text('loading...', style: subTitleNormStyle,);
+              String location = snapshot.data.documents[0]['location'];
+              if(location == null) {
+                location = "Add detailed information necessary";
+              }
+              return Text(location, style: document['name'] == null ? subTitleStyle : subTitleNormStyle,);
+            },
+          ),
           onTap: () {
             Navigator.push(context, MaterialPageRoute<void>(builder: (context){
               if (document['name'] == null)

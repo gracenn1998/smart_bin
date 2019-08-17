@@ -162,42 +162,47 @@ class _TrashBinListState extends State<TrashBinList> {
 
     return ListView(
       children: <Widget>[
-        ListTile(
-          leading: FlutterLogo(size: 100.0),
-          title: Text(name),
-          subtitle: StreamBuilder(
-            stream: Firestore.instance.collection('STB').where('tID', isEqualTo: document['tID']).snapshots(),
-            builder: (context, snapshot) {
-              if(!snapshot.hasData)
-                return Text('loading...', style: subTitleNormStyle,);
-              String location = snapshot.data.documents[0]['location'];
-              if(location == null) {
-                location = "Add detailed information necessary";
-              }
-              return Text(location, style: document['name'] == null ? subTitleStyle : subTitleNormStyle,);
-            },
-          ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute<void>(builder: (context){
-              if (document['name'] == null)
-                return
-                  AddInfo(tID: document['tID'], uID: uID);
-              return DetailPage(
-                  tID: document['tID'],
-                uID: uID,
-              );
+        StreamBuilder(
+          stream: Firestore.instance.collection('STB').where('tID', isEqualTo: document['tID']).snapshots(),
+          builder: (context, snapshot) {
+            if(!snapshot.hasData)
+              return Text('loading...', style: subTitleNormStyle,);
 
-            }));
+            //else
+            var doc = snapshot.data.documents[0];
+            String name = doc['name'] == null ? doc['tID']: doc['name'];
+            String location = doc['location'];
+            if(location == null) {
+              location = "Add detailed information necessary";
+            }
+
+            return ListTile(
+            leading: FlutterLogo(size: 100.0),
+            title: Text(name),
+            subtitle: Text(location, style: doc['location'] == null? subTitleStyle : subTitleNormStyle,),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+                if (doc['name'] == null)
+                  return
+                    AddInfo(tID: document['tID'], uID: uID);
+                return DetailPage(
+                  tID: document['tID'],
+                  uID: uID,
+                );
+
+              }));
+            },
+            trailing: IconButton(
+              icon: Icon(Icons.close),
+              // onPressed: () {
+              //   Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+              //     return EditPage();
+              //   }));
+              // },              // Please add the remove function HERE !! Thank you !!
+            ),
+            isThreeLine: true,
+          );
           },
-          trailing: IconButton(
-            icon: Icon(Icons.close),
-           // onPressed: () {
-           //   Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-           //     return EditPage();
-           //   }));
-           // },              // Please add the remove function HERE !! Thank you !!
-          ),
-          isThreeLine: true,
         ),
       ],
     );

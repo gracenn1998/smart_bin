@@ -14,39 +14,43 @@ admin.initializeApp();
 
 
 //exports.senNoti2= functions.firestore.document('users/{uID}/binList/{tID}')
-exports.senNoti2= functions.firestore.document('STB/{tID}')
+exports.senNoti= functions.firestore.document('STB/{tID}')
                                     .onUpdate((change, context) => {
-//      console.log('updated');
+      console.log('updated');
 //      const userID = context.params.uID;
       const tID = context.params.tID;
       const bin1 = change.after.data()['bin1'];
       const bin2 = change.after.data()['bin2'];
-//      const bin1Pre = change.previousData.data['bin1'];
-//      const bin2Pre = change.previousData.data['bin2'];
+      const bin1Old = change.before.data()['bin1'];
+      const bin2Old = change.before.data()['bin2'];
 
 //      console.log(bin1);
 
 
       if(bin1 == true || bin2 == true) {
-        var msg = {
-                notification: {
-                    title: 'Full Bin Announcement',
-                    body: 'Some sub-bins of bin ' + tID + ' have been full',
-                },
-                data : {
-                    "click_action": "FLUTTER_NOTIFICATION_CLICK",
-                    'tID' : tID,
-                    'bin1' : bin1.toString(),
-                    'bin2' : bin2.toString(),
-                }
-              };
-         admin.messaging().sendToTopic(tID, msg).then((response) => {
-            console.log("Success", response);
-         })
-         .catch((error) => {
-            console.log("Error", error);
-            return false;
-         });
+        if(bin1 != bin1Old || bin2 != bin2Old) {
+            console.log('noti');
+            var msg = {
+                            notification: {
+                                title: 'Full Bin Announcement',
+                                body: 'Some sub-bins of bin ' + tID + ' have been full',
+                            },
+                            data : {
+                                "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                                'tID' : tID,
+                                'bin1' : bin1.toString(),
+                                'bin2' : bin2.toString(),
+                            }
+                          };
+                     admin.messaging().sendToTopic(tID, msg).then((response) => {
+                        console.log("Success", response);
+                     })
+                     .catch((error) => {
+                        console.log("Error", error);
+                        return false;
+                     });
+        }
+
 
       }
 

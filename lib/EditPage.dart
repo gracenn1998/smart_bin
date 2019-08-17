@@ -6,18 +6,20 @@ import 'package:smartbin2/style.dart';
 
 
 class EditPage extends StatefulWidget {
-  final String tID;
+//  final String tID;
   final String uID;
-  const EditPage({@required this.tID, @required this.uID});
+  final binInfo;
+  const EditPage({@required this.uID, @required this.binInfo});
 
   @override
-  _EditPageState createState() => _EditPageState(tID, uID);
+  _EditPageState createState() => _EditPageState(uID, binInfo);
 }
 
 class _EditPageState extends State<EditPage> {
 
   String tID, uID;
-  _EditPageState(this.tID, this.uID);
+  var binInfo;
+  _EditPageState(this.uID, this.binInfo);
 
   File _image;
 
@@ -34,6 +36,15 @@ class _EditPageState extends State<EditPage> {
 //    _dateController.dispose();
     _memoController.dispose();
     super.dispose();
+  }
+
+  @override
+  initState() {
+    _nameController.text = binInfo['name'];
+    _locationController.text = binInfo['location'];
+//    _dateController.text = bin['idCard'];
+    _memoController.text = binInfo['memo'];
+    tID = binInfo['tID'];
   }
 
   getGalleryImage() async {
@@ -94,6 +105,25 @@ class _EditPageState extends State<EditPage> {
   }
 */
   Widget build(BuildContext context) {
+    print('reload');
+    String name, location, memo;
+//    Firestore.instance.collection('users')
+//        .document(uID)
+//        .collection('binList')
+//        .where('tID', isEqualTo: tID).getDocuments()
+//        .then((bin) {
+//          _locationController.text = bin.documents[0]['location'];
+////          _nameController.text = bin.documents[0]['name'];
+//          _memoController.text = bin.documents[0]['memo'];
+//        }
+//        );
+
+//    _nameController.text = binInfo['name'];
+//    _locationController.text = binInfo['location'];
+////    _dateController.text = bin['idCard'];
+//    _memoController.text = binInfo['memo'];
+
+
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text(
@@ -101,66 +131,52 @@ class _EditPageState extends State<EditPage> {
             style: appBarTxTStyle, textAlign: TextAlign.center,
           )),
         ),
-        body: StreamBuilder(
-          stream: Firestore.instance
-            .collection('users')
-            .document(uID)
-            .collection('binList')
-            .where('tID', isEqualTo: tID).snapshots(),
-          builder: (context, snapshot) {
-            if(!snapshot.hasData) return Center(child: Text('Loading...'));
-            bin = snapshot.data.documents[0];
-//            _nameController.text = bin['name'];
-//            locationController.text = bin['address'];
-//            dateController.text = bin['idCard'];
-//            memoController.text = bin['gender'];
-
-            return editAll(snapshot.data.documents[0]);
-          },
+        body: SingleChildScrollView(
+          child: editAll()
         ),
+//        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
     );
 
   }
 
-  Widget editAll(bin) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(left: 5, top: 40, right: 5),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(5),
-              child: idText(),
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: rowText(),
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: memoTextField(),
-            ),
-            RaisedButton(
-              onPressed: () {
+  Widget editAll() {
+    return Container(
+      padding: EdgeInsets.only(left: 5, top: 40, right: 5),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(5),
+            child: idText(),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: rowText(),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: memoTextField(),
+          ),
+          RaisedButton(
+            onPressed: () {
 
-                Firestore.instance.runTransaction((transaction) async{
-                  await transaction.update(Firestore.instance.collection('users')
-                      .document(uID)
-                      .collection('binList').document(tID), {
-                    'name' : _nameController.text,
-                    'location' : _locationController.text,
+              Firestore.instance.runTransaction((transaction) async{
+                await transaction.update(Firestore.instance.collection('users')
+                    .document(uID)
+                    .collection('binList').document(tID), {
+                  'name' : _nameController.text,
+                  'location' : _locationController.text,
 //                    'date' : _dateController.text,
-                    'memo' : _memoController.text,
-                  });
-                }).then((data) {print("upl");})
-                ;
-                Navigator.of(context).pop();
-              },
-              child: Text('Save', style: buttonTxtStyle),
-            ),
+                  'memo' : _memoController.text,
+                });
+              }).then((data) {print("upl");})
+              ;
+              Navigator.of(context).pop();
+            },
+            child: Text('Save', style: buttonTxtStyle),
+          ),
 
-          ],
-        ),
+        ],
       ),
     );
   }

@@ -19,6 +19,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var binDoc;
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text(
@@ -35,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
                   Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
                     return EditPage(
                       uID: uID,
-                      tID: tID,
+                      binInfo: binDoc,
                     );
                   }));
 //                  Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -55,8 +56,13 @@ class _DetailPageState extends State<DetailPage> {
                 .collection('binList')
                 .where('tID', isEqualTo: tID).snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Center(child: Text('Loading...')); else
-              return showAllInfo(snapshot.data.documents[0]);
+              if (!snapshot.hasData) return Center(child: Text('Loading...'));
+              else {
+//                print('ok');
+                binDoc = snapshot.data.documents[0];
+                return showAllInfo(binDoc);
+              }
+
             }),
 
     );

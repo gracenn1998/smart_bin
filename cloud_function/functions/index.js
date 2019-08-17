@@ -30,7 +30,7 @@ exports.senNoti2= functions.firestore.document('STB/{tID}')
       if(bin1 == true || bin2 == true) {
         var msg = {
                 notification: {
-                    title: 'Bin is full',
+                    title: 'Full bin announcement',
                     body: 'Some sub-bins of bin ' + tID + ' have been full',
                 },
                 data : {

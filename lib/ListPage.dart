@@ -35,8 +35,8 @@ class _TrashBinListState extends State<TrashBinList> {
             context: context,
             builder: (context) => AlertDialog(
               content: ListTile(
-                title: Text(msg['notification']['title'], style: listTileTitleStyle,),
-                subtitle: Text(msg['notification']['body'], style: listTileSubTitleStyle),
+                title: Text(msg['notification']['title'], style: titleStyle,),
+                subtitle: Text(msg['notification']['body'], style: subTitleStyle),
               ),
               actions: <Widget>[
                 FlatButton(
@@ -164,7 +164,7 @@ class _TrashBinListState extends State<TrashBinList> {
         ListTile(
           leading: FlutterLogo(size: 100.0),
           title: Text(name),
-          subtitle: Text(location),
+          subtitle: Text(location, style: document['name'] == null ? subTitleStyle : subTitleNormStyle,),
           onTap: () {
             Navigator.push(context, MaterialPageRoute<void>(builder: (context){
               if (document['name'] == null)

@@ -30,16 +30,21 @@ const TextStyle buttonTxtStyle = TextStyle(
     color: Colors.black
 );
 
-const TextStyle listTileTitleStyle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w400,
+const TextStyle titleStyle = TextStyle(
+    fontSize: 25,
+    fontWeight: FontWeight.w500,
     color: Colors.black
 );
 
-const TextStyle listTileSubTitleStyle = TextStyle(
-    fontSize: 15,
+const TextStyle subTitleStyle = TextStyle(
+    fontSize: 16,
     fontWeight: FontWeight.w400,
     color: Colors.pink
+);
+
+const TextStyle subTitleNormStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
 );
 
 

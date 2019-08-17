@@ -11,15 +11,15 @@ TextStyle binStatusStyle(status) {
   return TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w500,
-    color:  status == 0 ? Colors.black : //normal
+    color:  status == 0 ? Colors.teal: //normal
                           Colors.pink //full
   );
 
 }
 
 const TextStyle txtFieldStyle = TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w500,
+      fontSize: 15,
+      fontWeight: FontWeight.w400,
       color: Colors.black
 );
 

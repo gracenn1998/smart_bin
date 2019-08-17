@@ -31,7 +31,7 @@ const TextStyle buttonTxtStyle = TextStyle(
 );
 
 const TextStyle titleStyle = TextStyle(
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: FontWeight.w500,
     color: Colors.black
 );

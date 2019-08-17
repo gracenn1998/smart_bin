@@ -157,7 +157,7 @@ class _TrashBinListState extends State<TrashBinList> {
   Widget LSV(BuildContext context, DocumentSnapshot document) {
     final name = document['name'] == null ? document['tID']: document['name'];
     final location = document['location'] == null ?
-    "Add detail info necessary": document['location'];
+    "Add detailed information necessary": document['location'];
 
     return ListView(
       children: <Widget>[

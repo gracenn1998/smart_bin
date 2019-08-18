@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EditPage.dart';
 import 'package:smartbin2/style.dart';
 
+import 'dart:convert';
+
 class DetailPage extends StatefulWidget {
   final String tID;
   final String uID;
@@ -78,7 +80,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Container(
               padding: EdgeInsets.all(20),
-              child: rowText(bin['name'], bin['location']),
+              child: rowText(bin['name'], bin['location'], bin['img']),
             ),
             Row(
               children: <Widget>[
@@ -112,7 +114,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget rowText(name, location) {
+  Widget rowText(name, location, img) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -121,8 +123,8 @@ class _DetailPageState extends State<DetailPage> {
             height: 150.0,
             color: Colors.white,
             child: RaisedButton(
-              child: Icon(Icons.delete,
-                  color: const Color(0xFF000000), size: 120.0),
+              child: (img == null)? Icon(Icons.delete,
+                  color: const Color(0xFF000000), size: 120.0): imageFromBase64String(img),
               textColor: Colors.black12,
               color: Colors.white,
             ),
@@ -235,5 +237,11 @@ class _DetailPageState extends State<DetailPage> {
 
       ],
     );
+  }
+
+
+
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
   }
 }

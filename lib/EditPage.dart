@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:smartbin2/style.dart';
+import 'dart:convert';
 
 
 class EditPage extends StatefulWidget {
@@ -62,7 +63,10 @@ class _EditPageState extends State<EditPage> {
   }
 
   @override
+
   Widget addImage(){
+
+
     return AlertDialog(
       title: Text('Where do you want to get a picture?'),
       content: Container(
@@ -71,14 +75,25 @@ class _EditPageState extends State<EditPage> {
             children: <Widget>[
               RaisedButton(
                 child: Text('Camera'),
-                onPressed: () {
-                  return getCameraImage();
+                onPressed: () async{
+                  var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                  print("Lay anh xong");
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _image = image;
+                  });
                 },
               ),
               RaisedButton(
-                child: Text('My Galley'),
-                onPressed: () {
-                  return getGalleryImage();
+                child: Text('My Gallery'),
+                onPressed: () async {
+                  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  print("Lay anh xong");
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _image = image;
+                  });
+                  //  return getGalleryImage();
                 },
               )
             ],
@@ -159,7 +174,17 @@ class _EditPageState extends State<EditPage> {
           ),
           RaisedButton(
             onPressed: () {
+              String base64Image="";
 
+              if (_image!=null) {
+                List<int> imageBytes = _image.readAsBytesSync();
+                print(imageBytes);
+                base64Image = base64Encode(imageBytes);
+              } else {
+                if (base64Image == "" && binInfo['img'] != null) base64Image = binInfo['img'];
+              }
+
+             // print("String 64: $base64Image");
               Firestore.instance.runTransaction((transaction) async{
                 await transaction.update(Firestore.instance.collection('STB')
                       .document(tID), {
@@ -167,6 +192,7 @@ class _EditPageState extends State<EditPage> {
                   'location' : _locationController.text,
 //                    'date' : _dateController.text,
                   'memo' : _memoController.text,
+                  'img': base64Image
                 });
               }).then((data) {print("upl");})
               ;
@@ -208,34 +234,16 @@ class _EditPageState extends State<EditPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Where do you want to get a picture?'),
-                        content: Container(
-                            height: 130, //later add
-                            child: Column(
-                              children: <Widget>[
-                                RaisedButton(
-                                  child: Text('Camera'),
-                                  onPressed: () {
-                                    getCameraImage();
-                                  },
-                                ),
-                                RaisedButton(
-                                  child: Text('My Galley'),
-                                  onPressed: () {
-                                    getGalleryImage();
-                                  },
-                                )
-                              ],
-                            )
-                        ),
-                      );
+                      return addImage();
                     }
                 );
 
               },
-              child: Icon(Icons.delete,
-                  color: const Color(0xFF000000), size: 120.0),
+              child:
+              (_image == null) ?
+              (binInfo['img'] == null)? Icon(Icons.delete,
+                  color: const Color(0xFF000000), size: 120.0): imageFromBase64String(binInfo['img'])
+              : Container(child: new Image.file(_image),),
               textColor: Colors.black12,
               color: Colors.white,
             ),
@@ -255,7 +263,9 @@ class _EditPageState extends State<EditPage> {
       margin: EdgeInsets.all(5),
     );
   }
-
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
+  }
   Widget columnTextField() {
     return Column(
         children: <Widget>[

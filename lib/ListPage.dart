@@ -5,7 +5,7 @@ import 'package:smartbin2/utils/dtb_helper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:smartbin2/AddDetailInfo.dart';
 import 'package:smartbin2/style.dart';
-
+import 'dart:convert';
 class TrashBinList extends StatefulWidget {
   _TrashBinListState createState() => _TrashBinListState();
 }
@@ -177,7 +177,7 @@ class _TrashBinListState extends State<TrashBinList> {
             }
 
             return ListTile(
-            leading: FlutterLogo(size: 100.0),
+            leading: Container(width: 100, height:  100, child: imageFromBase64String(doc['img']),),
             title: Text(name),
             subtitle: Text(location, style: doc['location'] == null? subTitleStyle : subTitleNormStyle,),
             onTap: () {
@@ -206,6 +206,9 @@ class _TrashBinListState extends State<TrashBinList> {
     );
   }
 
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
+  }
 
 
   Widget buildFABAdd(){

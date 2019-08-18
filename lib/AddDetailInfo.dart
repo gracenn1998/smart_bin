@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:smartbin2/style.dart';
+import 'dart:convert';
 
 class AddInfo extends StatefulWidget {
   final String tID;
@@ -57,7 +58,15 @@ class AddInfoState extends State<AddInfo> {
                 ),
                 RaisedButton(
                   onPressed: () {
+                    String base64Image="";
 
+                    if (_image!=null) {
+                      List<int> imageBytes = _image.readAsBytesSync();
+                      print(imageBytes);
+                      base64Image = base64Encode(imageBytes);
+                    } else print("_image null");
+
+                    print("String 64: $base64Image");
                     Firestore.instance.runTransaction((transaction) async{
                       await transaction.update(Firestore.instance.collection('STB')
                           .document(tID), {
@@ -65,6 +74,7 @@ class AddInfoState extends State<AddInfo> {
                         'location' : _locationController.text,
 //                        'date' : _dateController.text,
                         'memo' : _memoController.text,
+                        'img': base64Image
                       });
                     }).then((data) {
                       print("upl");
@@ -122,34 +132,13 @@ class AddInfoState extends State<AddInfo> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Where do you want to get a picture?'),
-                        content: Container(
-                            height: 130, //later add
-                            child: Column(
-                              children: <Widget>[
-                                RaisedButton(
-                                  child: Text('Camera'),
-                                  onPressed: () {
-                                    getCameraImage();
-                                  },
-                                ),
-                                RaisedButton(
-                                  child: Text('My Galley'),
-                                  onPressed: () {
-                                    getGalleryImage();
-                                  },
-                                )
-                              ],
-                            )
-                        ),
-                      );
+                      return addImage();
                     }
                 );
 
               },
-              child: Icon(Icons.delete,
-                  color: const Color(0xFF000000), size: 120.0),
+              child: (_image==null)? Icon(Icons.delete,
+                  color: const Color(0xFF000000), size: 120.0): Container(child: new Image.file(_image),),
               textColor: Colors.black12,
               color: Colors.white,
             ),
@@ -216,22 +205,9 @@ class AddInfoState extends State<AddInfo> {
   }
 
 
-  getGalleryImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-    });
-  }
-
-  getCameraImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _image = image;
-    });
-  }
-
-
   Widget addImage(){
+
+
     return AlertDialog(
       title: Text('Where do you want to get a picture?'),
       content: Container(
@@ -240,14 +216,25 @@ class AddInfoState extends State<AddInfo> {
             children: <Widget>[
               RaisedButton(
                 child: Text('Camera'),
-                onPressed: () {
-                  return getCameraImage();
+                onPressed: () async{
+                  var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                  print("Lay anh xong");
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _image = image;
+                  });
                 },
               ),
               RaisedButton(
                 child: Text('My Galley'),
-                onPressed: () {
-                  return getGalleryImage();
+                onPressed: () async {
+                  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  print("Lay anh xong");
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _image = image;
+                  });
+               //  return getGalleryImage();
                 },
               )
             ],

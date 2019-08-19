@@ -77,16 +77,13 @@ class _TrashBinListState extends State<TrashBinList> {
       },
       onLaunch: (Map<String, dynamic> msg) {
         print("onLaunch: $msg");
-//        Navigator.push(
-//            context,
-//            MaterialPageRoute(
-//                builder: (context) =>
-//                    DetailPage(
-//                      uID: uID,
-//                      tID: msg['data']['tID'],
-//                    )
-//            )
-//        );
+        Navigator.push(context, MaterialPageRoute<void>(builder: (context){
+          return DetailPage(
+            uID: uID,
+            tID: msg['data']['tID'],
+          );
+
+        }));
       },
     );
 

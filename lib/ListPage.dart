@@ -177,7 +177,7 @@ class _TrashBinListState extends State<TrashBinList> {
             }
 
             return ListTile(
-            leading: Container(width: 100, height:  100, child: imageFromBase64String(doc['img']),),
+            leading: Container(width: 100, height:  100, child: (doc['img'] == null)? FlutterLogo(size: 100.0) : imageFromBase64String(doc['img']),),
             title: Text(name),
             subtitle: Text(location, style: doc['location'] == null? subTitleStyle : subTitleNormStyle,),
             onTap: () {

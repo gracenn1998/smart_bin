@@ -98,7 +98,8 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget idText(id) {
-    return Container(
+    return SingleChildScrollView(child:
+       Container(
       width: 350,
       height: 40,
       decoration: BoxDecoration(
@@ -109,11 +110,13 @@ class _DetailPageState extends State<DetailPage> {
           textScaleFactor: 1.3,
         ),
       ),
+    )
     );
+
   }
 
   Widget rowText(name, location) {
-    return Container(
+    return SingleChildScrollView(child: Container(
       child: Row(
         children: <Widget>[
           Container(
@@ -140,7 +143,7 @@ class _DetailPageState extends State<DetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       ),
       margin: EdgeInsets.all(5),
-    );
+    ));
   }
 
   Widget detailText(name, location) {
@@ -151,7 +154,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget detail(info) {
-    return Container(
+    return SingleChildScrollView(child: Container(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       margin: EdgeInsets.only(top: 7, bottom: 7),
       width: 150,
@@ -164,11 +167,11 @@ class _DetailPageState extends State<DetailPage> {
           textScaleFactor: 1.1,
         ),
       ),
-    );
+    ));
   }
 
   Widget memoText(memo) {
-    return Container(
+    return SingleChildScrollView(child:  Container(
       width: 350,
       height: 100,
       decoration: BoxDecoration(
@@ -181,7 +184,7 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget subBinStatus(bin1, bin2) {
